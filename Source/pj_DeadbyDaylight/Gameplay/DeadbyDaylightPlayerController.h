@@ -22,4 +22,7 @@ public :
 
 	UPROPERTY(VisibleAnywhere)
 	ADeadbyDaylightHUD* HUD;
+
+	UPROPERTY(VisibleAnywhere)
+	AElementManager* Manager;
 };
