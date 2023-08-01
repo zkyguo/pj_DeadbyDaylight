@@ -13,3 +13,4 @@ Apj_DeadbyDaylightGameMode::Apj_DeadbyDaylightGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+

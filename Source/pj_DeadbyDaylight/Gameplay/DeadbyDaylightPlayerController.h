@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "DeadbyDaylightHUD.h"
+#include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
 #include "DeadbyDaylightPlayerController.generated.h"
 
 /**
@@ -18,11 +19,19 @@ class PJ_DEADBYDAYLIGHT_API ADeadbyDaylightPlayerController : public APlayerCont
 protected:
 	virtual void BeginPlay() override;
 
-public :
+public:
 
 	UPROPERTY(VisibleAnywhere)
 	ADeadbyDaylightHUD* HUD;
 
 	UPROPERTY(VisibleAnywhere)
 	AElementManager* Manager;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsDemon;
+
+public :
+
+	UFUNCTION(BlueprintCallable,Server, Reliable)
+	void LoadingBattle(bool isDemon, int PlayerNum,const FText& PlayerName, UTexture2D* Texture);
 };

@@ -2,6 +2,8 @@
 
 
 #include "ElementManager.h"
+#include <pj_DeadbyDaylight/Gameplay/DeadbyDaylightHUD.h>
+#include <pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h>
 
 // Sets default values
 AElementManager::AElementManager()

@@ -16,4 +16,18 @@ class PJ_DEADBYDAYLIGHT_API ADeadbyDaylightGameMode : public AGameModeBase
 
 public :
 	ADeadbyDaylightGameMode();
+
+
+	/**
+	 * @brief Server side, receive client loaidng game request
+	 * @param player
+	 * @param isPlayerGhost
+	 * @param PlayerInGame
+	 * @param playerName
+	 * @param PlayerIcon
+	 */
+	void ReceiveClientReload(APlayerController* player, bool isPlayerGhost, int PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<APlayerController*>PlayersInGame;
 };

@@ -13,6 +13,9 @@ class Apj_DeadbyDaylightGameMode : public AGameModeBase
 
 public:
 	Apj_DeadbyDaylightGameMode();
+
+
+
 };
 
 

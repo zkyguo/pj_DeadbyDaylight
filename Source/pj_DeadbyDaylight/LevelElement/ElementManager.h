@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include <pj_DeadbyDaylight/Gameplay/DeadbyDaylightHUD.h>
-#include <pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h>
+
 #include "ElementManager.generated.h"
 
 
@@ -27,10 +26,10 @@ protected:
 public:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	ADeadbyDaylightHUD* HUD;
+	class ADeadbyDaylightHUD* HUD;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	ADeadbyDaylightPlayerController* PlayerController;
+	class ADeadbyDaylightPlayerController* PlayerController;
 
 
 };

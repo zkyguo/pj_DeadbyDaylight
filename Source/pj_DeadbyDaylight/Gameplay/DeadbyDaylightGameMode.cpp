@@ -12,3 +12,8 @@ ADeadbyDaylightGameMode::ADeadbyDaylightGameMode()
 	DefaultPawnClass = AWaitingPlayerPawn::StaticClass();
 	HUDClass = ADeadbyDaylightHUD::StaticClass();
 }
+
+void ADeadbyDaylightGameMode::ReceiveClientReload(APlayerController* player, bool isPlayerGhost, int PlayerInGame,
+	const FText& playerName, UTexture2D* PlayerIcon)
+{
+}
