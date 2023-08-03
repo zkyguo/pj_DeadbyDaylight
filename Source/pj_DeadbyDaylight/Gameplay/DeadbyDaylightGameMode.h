@@ -19,15 +19,37 @@ public :
 
 
 	/**
-	 * @brief Server side, receive client loaidng game request
+	 * @brief Server send Client the players who join game
 	 * @param player
 	 * @param isPlayerGhost
 	 * @param PlayerInGame
 	 * @param playerName
 	 * @param PlayerIcon
 	 */
-	void ReceiveClientReload(APlayerController* player, bool isPlayerGhost, int PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
+	UFUNCTION(BlueprintCallable, Server,Reliable)
+	void ReceiveClientReload(ADeadbyDaylightPlayerController* player, bool isPlayerGhost, int32 PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
+
+
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<APlayerController*>PlayersInGame;
+	TArray<ADeadbyDaylightPlayerController*>PlayersInGame;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FText>PlayersName;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<int32>DemonPlayerID;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<UTexture2D*>PlayerAvatars;
+
+
+	UPROPERTY(BlueprintReadWrite)
+	TMap<ADeadbyDaylightPlayerController*, int32>PlayerGold;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<ADeadbyDaylightPlayerController*>DemonInGame;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<ADeadbyDaylightPlayerController*>ExocistInGame;
 };

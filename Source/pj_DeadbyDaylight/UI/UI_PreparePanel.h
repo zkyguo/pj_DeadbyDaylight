@@ -32,4 +32,7 @@ public :
 
 	UPROPERTY(meta = (BindWidget))
 	UUI_PrepareBar* Player5_bar;
+
+	UFUNCTION(BlueprintCallable)
+	void RefreshPlayers(const TArray<UTexture2D*>&PlayerAvatar, TArray<FText> PlayerName);
 };

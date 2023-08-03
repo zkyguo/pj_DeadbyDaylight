@@ -22,8 +22,20 @@ void ADeadbyDaylightPlayerController::BeginPlay()
 
 }
 
+void ADeadbyDaylightPlayerController::startSelectCharacter_Implementation()
+{
+}
+
+void ADeadbyDaylightPlayerController::ReceivePreparedPlayer_Implementation(const TArray<UTexture2D*>& AllplayerAvatars,
+                                                                           const TArray<FText>& PlayerNames)
+{
+	HUD->PreparePanel->RefreshPlayers(PlayerAvatars, PlayerNames);
+	PlayerAvatars = AllplayerAvatars;
+}
+
+
 void ADeadbyDaylightPlayerController::LoadingBattle_Implementation(bool isDemon, int PlayerNum, const FText& PlayerName,
-	UTexture2D* Texture)
+                                                                   UTexture2D* Texture)
 {
 }
 

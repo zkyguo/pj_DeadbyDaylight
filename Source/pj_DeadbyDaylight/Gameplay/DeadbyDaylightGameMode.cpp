@@ -13,7 +13,36 @@ ADeadbyDaylightGameMode::ADeadbyDaylightGameMode()
 	HUDClass = ADeadbyDaylightHUD::StaticClass();
 }
 
-void ADeadbyDaylightGameMode::ReceiveClientReload(APlayerController* player, bool isPlayerGhost, int PlayerInGame,
-	const FText& playerName, UTexture2D* PlayerIcon)
+
+void ADeadbyDaylightGameMode::ReceiveClientReload_Implementation(ADeadbyDaylightPlayerController* player, bool isPlayerDemon, int32 PlayerCount,
+                                                                 const FText& playerName, UTexture2D* PlayerIcon)
 {
+	PlayersName.Add(playerName);
+	int32 playerIndex = PlayersInGame.Add(player);
+	PlayerAvatars.Add(PlayerIcon);
+	PlayerGold.Add(player, 0);
+
+	if(isPlayerDemon)
+	{
+		DemonInGame.Add(player);
+		DemonPlayerID.Add(playerIndex);
+	}
+	else
+	{
+		ExocistInGame.Add(player);
+	}
+
+	for (auto Players : PlayersInGame)
+	{
+		//Server load all client into game
+		Players->ReceivePreparedPlayer(PlayerAvatars, PlayersName);
+	}
+
+	if(PlayersInGame.Num() == PlayerCount)
+	{
+		for (auto player : PlayersInGame)
+		{
+			player->startSelectCharacter();
+		}
+	}
 }
