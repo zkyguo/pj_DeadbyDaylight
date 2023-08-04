@@ -35,24 +35,20 @@ public:
 
 public :
 	/**
-	 * @brief C2S, Client Send player Join Game request request to Server
-	 * @param isDemon 
-	 * @param PlayerNum 
-	 * @param PlayerName 
-	 * @param Texture 
+	 * @brief C2S, Client Send player Join Game request to Server
 	 */
 	UFUNCTION(BlueprintCallable,Server, Reliable)
 	void LoadingBattle(bool isDemon, int PlayerNum,const FText& PlayerName, UTexture2D* Texture);
 
 	/**
-	 * @brief S2C, Receive prepared players from server
+	 * @brief S2C, Client Receive prepared players from server
 	 */
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ReceivePreparedPlayer(const TArray<UTexture2D*>& AllplayerAvatars, const TArray<FText>& PlayerNames);
 
 	/**
- * @brief Server send client who is starting character selection
- */
+	* @brief S2C, Server tells client to start Character selection
+	*/
 	UFUNCTION(BlueprintCallable, Client, Reliable)
-		void startSelectCharacter();
+	void StartSelectCharacter();
 };

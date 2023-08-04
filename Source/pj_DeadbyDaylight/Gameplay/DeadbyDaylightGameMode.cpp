@@ -42,7 +42,7 @@ void ADeadbyDaylightGameMode::ReceiveClientReload_Implementation(ADeadbyDaylight
 	{
 		for (auto player : PlayersInGame)
 		{
-			player->startSelectCharacter();
+			player->StartSelectCharacter();
 		}
 	}
 }

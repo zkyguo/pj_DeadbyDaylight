@@ -19,12 +19,7 @@ public :
 
 
 	/**
-	 * @brief Server send Client the players who join game
-	 * @param player
-	 * @param isPlayerGhost
-	 * @param PlayerInGame
-	 * @param playerName
-	 * @param PlayerIcon
+	 * @brief Server send Client the players who joined game
 	 */
 	UFUNCTION(BlueprintCallable, Server,Reliable)
 	void ReceiveClientReload(ADeadbyDaylightPlayerController* player, bool isPlayerGhost, int32 PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
