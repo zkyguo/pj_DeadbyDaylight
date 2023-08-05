@@ -21,8 +21,12 @@ protected:
 
 public:
 
+	ADeadbyDaylightPlayerController();
+
 	UPROPERTY(VisibleAnywhere)
 	ADeadbyDaylightHUD* HUD;
+
+	TSubclassOf<UUI_PreparePanel> PreparePanelClass;
 
 	UPROPERTY(VisibleAnywhere)
 	AElementManager* Manager;
@@ -31,7 +35,7 @@ public:
 	bool bIsDemon;
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<UTexture2D*>& PlayerAvatars;
+	TArray<UTexture2D*> PlayerAvatars;
 
 public :
 	/**
@@ -51,4 +55,7 @@ public :
 	*/
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void StartSelectCharacter();
+
+
+
 };

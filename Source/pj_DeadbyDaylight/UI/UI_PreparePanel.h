@@ -16,6 +16,10 @@ class PJ_DEADBYDAYLIGHT_API UUI_PreparePanel : public UUserWidget
 {
 	GENERATED_BODY()
 
+
+protected:
+	virtual void NativeConstruct() override;
+
 public :
 
 	UPROPERTY(meta = (BindWidget))
@@ -35,4 +39,6 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	void RefreshPlayers(const TArray<UTexture2D*>&PlayerAvatar, TArray<FText> PlayerName);
+
+
 };

@@ -3,3 +3,7 @@
 
 #include "UI_PrepareBar.h"
 
+void UUI_PrepareBar::NativeConstruct()
+{
+	Super::NativeConstruct();
+}

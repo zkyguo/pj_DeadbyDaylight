@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Engine/Texture2D.h"
+#include "Components/Image.h"
 #include "UI_PrepareBar.generated.h"
 
 /**
@@ -15,14 +15,17 @@ class PJ_DEADBYDAYLIGHT_API UUI_PrepareBar : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void NativeConstruct() override;
+
 public :
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	bool isLoaded;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	UTexture2D* CharacterAvatar;
+	UPROPERTY(meta = (BindWidget))
+	UImage* CharacterAvatar;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	FText PlayerName;
+	FText PlayerName = FText::FromString("");
 };

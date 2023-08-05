@@ -3,6 +3,11 @@
 
 #include "UI_PreparePanel.h"
 
+void UUI_PreparePanel::NativeConstruct()
+{
+	Super::NativeConstruct();
+}
+
 void UUI_PreparePanel::RefreshPlayers(const TArray<UTexture2D*>& PlayerAvatar, TArray<FText> PlayerName)
 {
     for (int32 i = 0; i < PlayerAvatar.Num(); i++)
@@ -30,5 +35,6 @@ void UUI_PreparePanel::RefreshPlayers(const TArray<UTexture2D*>& PlayerAvatar, T
 
         BarToUpdate->isLoaded = true;
         BarToUpdate->PlayerName = PlayerName[i];
+        BarToUpdate->CharacterAvatar->SetBrushFromTexture(PlayerAvatar[i]);
     }
 }

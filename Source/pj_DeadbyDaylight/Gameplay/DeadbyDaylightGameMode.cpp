@@ -17,19 +17,22 @@ ADeadbyDaylightGameMode::ADeadbyDaylightGameMode()
 void ADeadbyDaylightGameMode::ReceiveClientReload_Implementation(ADeadbyDaylightPlayerController* player, bool isPlayerDemon, int32 PlayerCount,
                                                                  const FText& playerName, UTexture2D* PlayerIcon)
 {
-	PlayersName.Add(playerName);
-	int32 playerIndex = PlayersInGame.Add(player);
-	PlayerAvatars.Add(PlayerIcon);
-	PlayerGold.Add(player, 0);
+	if (!PlayersInGame.Contains(player))
+	{
+		PlayersName.Add(playerName);
+		int32 playerIndex = PlayersInGame.Add(player);
+		PlayerAvatars.Add(PlayerIcon);
+		PlayerGold.Add(player, 0);
 
-	if(isPlayerDemon)
-	{
-		DemonInGame.Add(player);
-		DemonPlayerID.Add(playerIndex);
-	}
-	else
-	{
-		ExocistInGame.Add(player);
+		if (isPlayerDemon)
+		{
+			DemonInGame.Add(player);
+			DemonPlayerID.Add(playerIndex);
+		}
+		else
+		{
+			ExocistInGame.Add(player);
+		}
 	}
 
 	for (auto Players : PlayersInGame)
@@ -38,11 +41,12 @@ void ADeadbyDaylightGameMode::ReceiveClientReload_Implementation(ADeadbyDaylight
 		Players->ReceivePreparedPlayer(PlayerAvatars, PlayersName);
 	}
 
-	if(PlayersInGame.Num() == PlayerCount)
+	if (PlayersInGame.Num() == PlayerCount)
 	{
 		for (auto player : PlayersInGame)
 		{
 			player->StartSelectCharacter();
 		}
 	}
+
 }

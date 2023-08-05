@@ -8,26 +8,38 @@
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
 
 
+ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
+{
+	static ConstructorHelpers::FClassFinder<UUI_PreparePanel> PreparePanel_BPClass(TEXT("/Game/Asset/UI/BeforeBattle/BP_PreparePanel"));
+	PreparePanelClass = PreparePanel_BPClass.Class;
+	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
+}
+
 void ADeadbyDaylightPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetWorld()->IsNetMode(NM_ListenServer))
+	if (GetWorld()->IsNetMode(NM_Client) && IsLocalPlayerController())
 	{
 		HUD = Cast<ADeadbyDaylightHUD>(GetHUD());
 
-		HUD->PreparePanel = CreateWidget<UUI_PreparePanel>(this);
-		HUD->PreparePanel->AddToViewport();
+		if (PreparePanelClass)
+		{
+			HUD->PreparePanel = CreateWidget<UUI_PreparePanel>(this, PreparePanelClass);
+			HUD->PreparePanel->AddToViewport();
 
-		Manager = GetWorld()->SpawnActor<AElementManager>();
-		Manager->HUD = HUD;
-		Manager->PlayerController = this;
+			Manager = GetWorld()->SpawnActor<AElementManager>();
+			Manager->HUD = HUD;
+			Manager->PlayerController = this;
+		}
 	}
-
 }
+
+
 
 void ADeadbyDaylightPlayerController::StartSelectCharacter_Implementation()
 {
+
 }
 
 void ADeadbyDaylightPlayerController::ReceivePreparedPlayer_Implementation(const TArray<UTexture2D*>& AllplayerAvatars,
@@ -42,8 +54,8 @@ void ADeadbyDaylightPlayerController::LoadingBattle_Implementation(bool isDemon,
                                                                    UTexture2D* Texture)
 {
 	//Get gameMode and Send owning player info to Server for joining game.
-	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	GameMode->ReceiveClientReload(this, isDemon, PlayerNum, PlayerName, Texture);
+	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(GetWorld()->GetAuthGameMode());
+	GameMode->ReceiveClientReload(this, isDemon, PlayerNum, FText::FromString(this->GetName()), Texture);
 }
 
 
