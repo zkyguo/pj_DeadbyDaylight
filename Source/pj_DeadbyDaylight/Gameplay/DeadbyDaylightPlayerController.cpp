@@ -3,17 +3,18 @@
 
 #include "DeadbyDaylightPlayerController.h"
 #include "DeadbyDaylightGameMode.h"
-#include "Kismet/GameplayStatics.h"
 #include "pj_DeadbyDaylight/UI/UI_PreparePanel.h"
+#include "pj_DeadbyDaylight/UI/UI_SelectCharacterPanel.h"
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
 
 
 ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 {
-	static ConstructorHelpers::FClassFinder<UUI_PreparePanel> PreparePanel_BPClass(TEXT("/Game/Asset/UI/BeforeBattle/BP_PreparePanel"));
-	PreparePanelClass = PreparePanel_BPClass.Class;
+	
 	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
 }
+
+
 
 void ADeadbyDaylightPlayerController::BeginPlay()
 {
@@ -22,10 +23,11 @@ void ADeadbyDaylightPlayerController::BeginPlay()
 	if (GetWorld()->IsNetMode(NM_Client) && IsLocalPlayerController())
 	{
 		HUD = Cast<ADeadbyDaylightHUD>(GetHUD());
+		
 
-		if (PreparePanelClass)
+		if (HUD->PreparePanelClass)
 		{
-			HUD->PreparePanel = CreateWidget<UUI_PreparePanel>(this, PreparePanelClass);
+			HUD->PreparePanel = CreateWidget<UUI_PreparePanel>(this, HUD->PreparePanelClass);
 			HUD->PreparePanel->AddToViewport();
 
 			Manager = GetWorld()->SpawnActor<AElementManager>();
@@ -39,6 +41,18 @@ void ADeadbyDaylightPlayerController::BeginPlay()
 
 void ADeadbyDaylightPlayerController::StartSelectCharacter_Implementation()
 {
+	
+
+	if(HUD->SelectCharacterClass)
+	{
+		HUD->SelectCharacterPanel = CreateWidget<UUI_SelectCharacterPanel>(this, HUD->SelectCharacterClass);
+		if (HUD->PreparePanel)
+		{
+			HUD->PreparePanel->RemoveFromViewport();
+		}
+		HUD->SelectCharacterPanel->AddToViewport();
+	}
+
 
 }
 
@@ -58,6 +72,9 @@ void ADeadbyDaylightPlayerController::LoadingBattle_Implementation(bool isDemon,
 	GameMode->ReceiveClientReload(this, isDemon, PlayerNum, FText::FromString(this->GetName()), Texture);
 }
 
+void ADeadbyDaylightPlayerController::SelectCharacterConfirmation_Implementation(AGameCharacter* SelectCharacter)
+{
+}
 
 
 

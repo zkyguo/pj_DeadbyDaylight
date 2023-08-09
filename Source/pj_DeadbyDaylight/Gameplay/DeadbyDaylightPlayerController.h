@@ -6,7 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "DeadbyDaylightHUD.h"
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
+#include <pj_DeadbyDaylight/Character/GameCharacter.h>
 #include "DeadbyDaylightPlayerController.generated.h"
+
 
 /**
  * 
@@ -25,8 +27,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	ADeadbyDaylightHUD* HUD;
-
-	TSubclassOf<UUI_PreparePanel> PreparePanelClass;
 
 	UPROPERTY(VisibleAnywhere)
 	AElementManager* Manager;
@@ -56,6 +56,10 @@ public :
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void StartSelectCharacter();
 
-
+	/**
+	 * @brief C2S, Server receive Client
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void SelectCharacterConfirmation(AGameCharacter* SelectCharacter);
 
 };

@@ -24,14 +24,14 @@ void ADeadbyDaylightGameMode::ReceiveClientReload_Implementation(ADeadbyDaylight
 		PlayerAvatars.Add(PlayerIcon);
 		PlayerGold.Add(player, 0);
 
-		if (isPlayerDemon)
+		if (playerIndex == 0)
 		{
 			DemonInGame.Add(player);
 			DemonPlayerID.Add(playerIndex);
 		}
 		else
 		{
-			ExocistInGame.Add(player);
+			ExorcistInGame.Add(player);
 		}
 	}
 

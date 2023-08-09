@@ -46,5 +46,5 @@ public :
 	TArray<ADeadbyDaylightPlayerController*>DemonInGame;
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<ADeadbyDaylightPlayerController*>ExocistInGame;
+	TArray<ADeadbyDaylightPlayerController*>ExorcistInGame;
 };
