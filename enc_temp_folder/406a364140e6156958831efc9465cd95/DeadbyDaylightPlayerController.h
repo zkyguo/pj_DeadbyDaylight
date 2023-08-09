@@ -37,6 +37,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<UTexture2D*> PlayerAvatars;
 
+public :
 	/**
 	 * @brief C2S, Client Send player Join Game request to Server
 	 */
@@ -60,17 +61,5 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void SelectCharacter(TSubclassOf<AGameCharacter> CharacterSelect);
-
-	/**
-	 * @brief S2C, Client receive character selection from other client
-	 */
-	UFUNCTION(BlueprintCallable, Client, Reliable)
-	void ReceiveCharacterSelect(int32 playerIndex, FName PlayerName, TSubclassOf<AGameCharacter> SelectedCharacter);
-
-	
-
-private:
-
-	
 
 };

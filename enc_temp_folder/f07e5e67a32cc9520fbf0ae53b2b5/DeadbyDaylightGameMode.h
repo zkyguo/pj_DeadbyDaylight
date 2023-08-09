@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "TimerManager.h"
 #include "DeadbyDaylightGameMode.generated.h"
 
 /**
@@ -22,7 +21,10 @@ public :
 	/**
 	 * @brief Server send Client the players who joined game
 	 */
+	UFUNCTION(BlueprintCallable, Server,Reliable)
 	void ReceiveClientReload(ADeadbyDaylightPlayerController* player, bool isPlayerGhost, int32 PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
+
+
 
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ADeadbyDaylightPlayerController*>PlayersInGame;
@@ -36,6 +38,7 @@ public :
 	UPROPERTY(BlueprintReadWrite)
 	TArray<UTexture2D*>PlayerAvatars;
 
+
 	UPROPERTY(BlueprintReadWrite)
 	TMap<ADeadbyDaylightPlayerController*, int32>PlayerGold;
 
@@ -44,16 +47,4 @@ public :
 
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ADeadbyDaylightPlayerController*>ExorcistInGame;
-
-private:
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController,TSubclassOf<AGameCharacter> CharacterSelected);
-
-	UFUNCTION(BlueprintCallable)
-	void BeginBattle();
-
-	TMap<ADeadbyDaylightPlayerController*, TSubclassOf<AGameCharacter>> PlayersClass;
-
-	FTimerHandle TimerHandle;
 };

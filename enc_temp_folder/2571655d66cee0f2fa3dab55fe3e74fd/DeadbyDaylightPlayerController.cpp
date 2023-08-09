@@ -74,17 +74,9 @@ void ADeadbyDaylightPlayerController::LoadingBattle_Implementation(bool isDemon,
 
 void ADeadbyDaylightPlayerController::SelectCharacter_Implementation(TSubclassOf<AGameCharacter> CharacterSelect)
 {
-	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(GetWorld()->GetAuthGameMode());
-
-	
 
 }
 
-void ADeadbyDaylightPlayerController::ReceiveCharacterSelect_Implementation(int32 playerIndex, FName PlayerName,
-	TSubclassOf<AGameCharacter> SelectedCharacter)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Player %d select %s."), playerIndex, *SelectedCharacter->GetName());
-}
 
 
 

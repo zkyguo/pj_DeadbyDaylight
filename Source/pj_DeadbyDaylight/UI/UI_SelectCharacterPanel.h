@@ -19,6 +19,9 @@ class PJ_DEADBYDAYLIGHT_API UUI_SelectCharacterPanel : public UUserWidget
 {
 	GENERATED_BODY()
 
+public :
+	UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer);
+
 protected:
 	virtual void NativeConstruct() override;
 

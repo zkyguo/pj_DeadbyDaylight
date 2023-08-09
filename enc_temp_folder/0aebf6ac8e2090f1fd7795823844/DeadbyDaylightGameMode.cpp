@@ -14,7 +14,7 @@ ADeadbyDaylightGameMode::ADeadbyDaylightGameMode()
 }
 
 
-void ADeadbyDaylightGameMode::ReceiveClientReload(ADeadbyDaylightPlayerController* player, bool isPlayerDemon, int32 PlayerCount,
+void ADeadbyDaylightGameMode::ReceiveClientReload_Implementation(ADeadbyDaylightPlayerController* player, bool isPlayerDemon, int32 PlayerCount,
                                                                  const FText& playerName, UTexture2D* PlayerIcon)
 {
 	if (!PlayersInGame.Contains(player))
@@ -48,27 +48,5 @@ void ADeadbyDaylightGameMode::ReceiveClientReload(ADeadbyDaylightPlayerControlle
 			player->StartSelectCharacter();
 		}
 	}
-
-}
-
-void ADeadbyDaylightGameMode::UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController,
-	TSubclassOf<AGameCharacter> CharacterSelected)
-{
-	PlayersClass.Add(PlayerController, CharacterSelected);
-
-	for (int32 i = 0; i < PlayersInGame.Num(); i++)
-	{
-		int32 index = PlayersInGame.Find(PlayerController);
-		PlayersInGame[i]->ReceiveCharacterSelect(index,*PlayersName[index].ToString(), CharacterSelected);
-	}
-	if(PlayersClass.Num() == PlayersInGame.Num())
-	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::BeginBattle, 5.0f, false);
-		
-	}
-}
-
-void ADeadbyDaylightGameMode::BeginBattle()
-{
 
 }

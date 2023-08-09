@@ -3,17 +3,16 @@
 
 #include "UI_SelectCharacterPanel.h"
 #include "pj_DeadbyDaylight/Character/DemonCharacter.h"
-#include "pj_DeadbyDaylight/Character/ExorcistCharacter.h"
 #include "pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h"
 
 
 UUI_SelectCharacterPanel::UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	
-	static ConstructorHelpers::FClassFinder<ADemonCharacter> DemonCharacter_BPClass(TEXT("/Game/Game/Character/BP_DemonCharacter"));
+	static ConstructorHelpers::FClassFinder<UUI_PreparePanel> DemonCharacter_BPClass(TEXT("/Game/Game/Character/BP_DemonCharacter"));
 	DemonCharacterClass = DemonCharacter_BPClass.Class;
 
-	static ConstructorHelpers::FClassFinder<AExorcistCharacter> ExorcistCharacter_BPClass(TEXT("/Game/Game/Character/BP_ExorcistCharacter"));
+	static ConstructorHelpers::FClassFinder<UUI_PreparePanel> ExorcistCharacter_BPClass(TEXT("/Game/Game/Character/BP_ExorcistCharacter"));
 	ExorcistCharacterClass = ExorcistCharacter_BPClass.Class;
 }
 
@@ -30,8 +29,9 @@ void UUI_SelectCharacterPanel::OnDemonButtonClick()
 {
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(DemonCharacterClass);
-	DemonButton->SetIsEnabled(false);
-	ExocistButton->SetIsEnabled(true);
+	bIsNotSelect = !bIsNotSelect;
+	DemonButton->SetIsEnabled(bIsNotSelect);
+
 	PlayerController->bIsDemon = true;
 }
 
@@ -40,7 +40,7 @@ void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(ExorcistCharacterClass);
 	bIsNotSelect = !bIsNotSelect;
-	ExocistButton->SetIsEnabled(false);
-	DemonButton->SetIsEnabled(true);
+	DemonButton->SetIsEnabled(bIsNotSelect);
+	
 	PlayerController->bIsDemon = false;
 }
