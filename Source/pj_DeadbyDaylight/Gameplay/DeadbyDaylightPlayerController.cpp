@@ -72,8 +72,9 @@ void ADeadbyDaylightPlayerController::LoadingBattle_Implementation(bool isDemon,
 	GameMode->ReceiveClientReload(this, isDemon, PlayerNum, FText::FromString(this->GetName()), Texture);
 }
 
-void ADeadbyDaylightPlayerController::SelectCharacterConfirmation_Implementation(AGameCharacter* SelectCharacter)
+void ADeadbyDaylightPlayerController::SelectCharacter_Implementation(TSubclassOf<AGameCharacter> CharacterSelect)
 {
+
 }
 
 

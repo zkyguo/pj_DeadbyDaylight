@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include <Components/Button.h>
+#include <pj_DeadbyDaylight/Character/ExorcistCharacter.h>
+#include <pj_DeadbyDaylight/Character/DemonCharacter.h>
 #include "UI_SelectCharacterPanel.generated.h"
+
 
 
 /**
@@ -26,6 +29,15 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExocistButton;
 
+	UPROPERTY(EditAnywhere)
+	bool bIsNotSelect = true;;
+
+	TSubclassOf<ADemonCharacter> DemonCharacterClass;
+	TSubclassOf<AExorcistCharacter> ExorcistCharacterClass;
+
 	UFUNCTION(BlueprintCallable)
 	void OnDemonButtonClick();
+
+	UFUNCTION(BlueprintCallable)
+	void OnExorcistButtonClick();
 };

@@ -57,9 +57,9 @@ public :
 	void StartSelectCharacter();
 
 	/**
-	 * @brief C2S, Server receive Client
+	 * @brief C2S, Server receive character which Client select
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void SelectCharacterConfirmation(AGameCharacter* SelectCharacter);
+	void SelectCharacter(TSubclassOf<AGameCharacter> CharacterSelect);
 
 };
