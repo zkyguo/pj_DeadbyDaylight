@@ -37,6 +37,12 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<UTexture2D*> PlayerAvatars;
 
+	UPROPERTY(BlueprintReadWrite)
+	int32 MyPlayerIndex;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<int32> DemonPlayersIndexInGame;
+
 	/**
 	 * @brief C2S, Client Send player Join Game request to Server
 	 */
@@ -65,9 +71,13 @@ public:
 	 * @brief S2C, Client receive character selection from other client
 	 */
 	UFUNCTION(BlueprintCallable, Client, Reliable)
-	void ReceiveCharacterSelect(int32 playerIndex, FName PlayerName, TSubclassOf<AGameCharacter> SelectedCharacter);
+	void ReceiveCharacterSelect(int32 OtherIndex, FName PlayerName, TSubclassOf<AGameCharacter> SelectedCharacter);
 
-	
+	/**
+	 * @brief S2C,Client receive battle start information from Server
+	 */
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void ReceiveBattleBegin(int32 MyIndex, const TArray<int32>& DemonPlayersIndex);
 
 private:
 

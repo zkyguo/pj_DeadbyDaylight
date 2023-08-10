@@ -4,6 +4,8 @@
 #include "UI_SelectCharacterPanel.h"
 #include "pj_DeadbyDaylight/Character/DemonCharacter.h"
 #include "pj_DeadbyDaylight/Character/ExorcistCharacter.h"
+#include "Gameplay/UI_BattleUI.h"
+#include "Gameplay/UI_EscapeKeyPanel.h"
 #include "pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h"
 
 
@@ -15,6 +17,7 @@ UUI_SelectCharacterPanel::UUI_SelectCharacterPanel(const FObjectInitializer& Obj
 
 	static ConstructorHelpers::FClassFinder<AExorcistCharacter> ExorcistCharacter_BPClass(TEXT("/Game/Game/Character/BP_ExorcistCharacter"));
 	ExorcistCharacterClass = ExorcistCharacter_BPClass.Class;
+
 }
 
 void UUI_SelectCharacterPanel::NativeConstruct()
@@ -43,4 +46,24 @@ void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 	ExocistButton->SetIsEnabled(false);
 	DemonButton->SetIsEnabled(true);
 	PlayerController->bIsDemon = false;
+}
+
+void UUI_SelectCharacterPanel::BattleBeginningCountDown()
+{
+	if(BattleBeginCountDown != 0)
+	{
+		BattleBeginCountDown--;
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
+		ADeadbyDaylightHUD* HUD = Cast<ADeadbyDaylightHUD>(GetOwningPlayer()->GetHUD());
+		HUD->BattleUI = CreateWidget<UUI_BattleUI>(GetOwningPlayer(), HUD->BattleUIClass);
+		HUD->BattleUI->AddToViewport();
+
+		HUD->EscapeKeyPanel = CreateWidget<UUI_EscapeKeyPanel>(GetOwningPlayer(), HUD->EscapeKeyPanelClass);
+		HUD->EscapeKeyPanel->AddToViewport();
+
+		RemoveFromParent();
+	}
 }

@@ -6,7 +6,11 @@
 #include "GameFramework/HUD.h"
 #include <pj_DeadbyDaylight/UI/UI_PreparePanel.h>
 #include <pj_DeadbyDaylight/UI/UI_SelectCharacterPanel.h>
+#include <pj_DeadbyDaylight/UI/Gameplay/UI_BattleUI.h>
+#include <pj_DeadbyDaylight/UI/Gameplay/UI_EscapeKeyPanel.h>
 #include "DeadbyDaylightHUD.generated.h"
+
+
 
 
 /**
@@ -26,6 +30,14 @@ public :
 	UPROPERTY(BlueprintReadWrite)
 	UUI_SelectCharacterPanel* SelectCharacterPanel;
 
+	UPROPERTY(BlueprintReadWrite)
+	UUI_BattleUI* BattleUI;
+
+	UPROPERTY(BlueprintReadWrite)
+	UUI_EscapeKeyPanel* EscapeKeyPanel;
+
+	TSubclassOf<UUI_EscapeKeyPanel> EscapeKeyPanelClass;
+	TSubclassOf<UUI_BattleUI> BattleUIClass;
 	TSubclassOf<UUI_PreparePanel> PreparePanelClass;
 	TSubclassOf<UUI_SelectCharacterPanel> SelectCharacterClass;
 };

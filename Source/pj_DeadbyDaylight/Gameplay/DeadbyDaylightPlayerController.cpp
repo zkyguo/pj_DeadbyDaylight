@@ -14,6 +14,18 @@ ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
 }
 
+void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 MyIndex, const TArray<int32>& DemonPlayersIndex)
+{
+	MyPlayerIndex = MyIndex;
+	DemonPlayersIndexInGame = DemonPlayersIndex;
+
+	HUD->SelectCharacterPanel->CountDownText->SetText(FText::FromString("Game will start soon!"));
+	GetWorld()->GetTimerManager().ClearTimer(HUD->SelectCharacterPanel->CountDownTimerHandler);
+	HUD->SelectCharacterPanel->BattleBeginCountDown = 5;
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,false);
+}
 
 
 void ADeadbyDaylightPlayerController::BeginPlay()
@@ -80,11 +92,14 @@ void ADeadbyDaylightPlayerController::SelectCharacter_Implementation(TSubclassOf
 
 }
 
-void ADeadbyDaylightPlayerController::ReceiveCharacterSelect_Implementation(int32 playerIndex, FName PlayerName,
+void ADeadbyDaylightPlayerController::ReceiveCharacterSelect_Implementation(int32 OtherIndex, FName PlayerName,
 	TSubclassOf<AGameCharacter> SelectedCharacter)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player %d select %s."), playerIndex, *SelectedCharacter->GetName());
+	UE_LOG(LogTemp,Warning,TEXT("Player %d selects %s as character"), OtherIndex, *SelectedCharacter->GetName())
 }
+
+
+
 
 
 

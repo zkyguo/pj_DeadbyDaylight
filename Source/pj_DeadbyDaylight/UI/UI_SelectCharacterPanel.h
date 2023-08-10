@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include <Components/Button.h>
+#include <Components/TextBlock.h>
 #include <pj_DeadbyDaylight/Character/ExorcistCharacter.h>
 #include <pj_DeadbyDaylight/Character/DemonCharacter.h>
 #include "UI_SelectCharacterPanel.generated.h"
+
 
 
 
@@ -22,6 +24,21 @@ class PJ_DEADBYDAYLIGHT_API UUI_SelectCharacterPanel : public UUserWidget
 public :
 	UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	bool bIsNotSelect = true;;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	int32 BattleBeginCountDown;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	FTimerHandle CountDownTimerHandler;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* CountDownText;
+
+	UFUNCTION(BlueprintCallable)
+	void BattleBeginningCountDown();
+
 protected:
 	virtual void NativeConstruct() override;
 
@@ -32,9 +49,6 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExocistButton;
 
-	UPROPERTY(EditAnywhere)
-	bool bIsNotSelect = true;;
-
 	TSubclassOf<ADemonCharacter> DemonCharacterClass;
 	TSubclassOf<AExorcistCharacter> ExorcistCharacterClass;
 
@@ -43,4 +57,6 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void OnExorcistButtonClick();
+
+	
 };
