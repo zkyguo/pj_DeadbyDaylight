@@ -25,10 +25,10 @@ public :
 	UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	bool bIsNotSelect = true;;
+	bool bIsCharaterSelect = false;;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	int32 BattleBeginCountDown;
+	int32 BattleBeginCountDown = 30;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	FTimerHandle CountDownTimerHandler;
@@ -38,6 +38,9 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 	void BattleBeginningCountDown();
+
+	UFUNCTION(BlueprintCallable)
+	void SelectCharacterBeginCountDown();
 
 protected:
 	virtual void NativeConstruct() override;

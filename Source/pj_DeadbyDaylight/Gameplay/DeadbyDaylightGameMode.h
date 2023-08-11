@@ -24,18 +24,33 @@ public :
 	 */
 	void ReceiveClientReload(ADeadbyDaylightPlayerController* player, bool isPlayerGhost, int32 PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
 
+	/**
+	 * @brief All player in game
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ADeadbyDaylightPlayerController*>PlayersInGame;
 
+	/**
+	 * @brief All playerName in game
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FText>PlayersName;
 
+	/**
+	 * @brief All demon player index(ID)
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	TArray<int32>DemonPlayerID;
 
+	/**
+	 * @brief All player Icon
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	TArray<UTexture2D*>PlayerAvatars;
 
+	/**
+	 * @brief All player current gold 
+	 */
 	UPROPERTY(BlueprintReadWrite)
 	TMap<ADeadbyDaylightPlayerController*, int32>PlayerGold;
 
@@ -50,6 +65,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController,TSubclassOf<AGameCharacter> CharacterSelected);
 
+	/**
+	 * @brief Setup Game start.
+	 */
 	UFUNCTION(BlueprintCallable)
 	void BeginBattle();
 

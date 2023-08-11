@@ -63,12 +63,15 @@ void ADeadbyDaylightGameMode::UpdateSelectedCharacter(ADeadbyDaylightPlayerContr
 	}
 	if(PlayersClass.Num() == PlayersInGame.Num())
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::BeginBattle, 5.0f, false);
-		
+		//Begin Battle start count down
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::BeginBattle, 5.1f, false);
 	}
 }
 
 void ADeadbyDaylightGameMode::BeginBattle()
 {
-
+	for (int32 i = 0; i < PlayersInGame.Num(); i++)
+	{
+		PlayersInGame[i]->ReceiveBattleBegin(i, DemonPlayerID);
+	}
 }

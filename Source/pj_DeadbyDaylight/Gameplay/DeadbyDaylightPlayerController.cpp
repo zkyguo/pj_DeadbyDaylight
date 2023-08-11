@@ -23,8 +23,7 @@ void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 My
 	GetWorld()->GetTimerManager().ClearTimer(HUD->SelectCharacterPanel->CountDownTimerHandler);
 	HUD->SelectCharacterPanel->BattleBeginCountDown = 5;
 
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,false);
+	GetWorld()->GetTimerManager().SetTimer(HUD->SelectCharacterPanel->CountDownTimerHandler, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,false);
 }
 
 

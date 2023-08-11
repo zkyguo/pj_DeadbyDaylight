@@ -35,6 +35,7 @@ void UUI_SelectCharacterPanel::OnDemonButtonClick()
 	PlayerController->SelectCharacter(DemonCharacterClass);
 	DemonButton->SetIsEnabled(false);
 	ExocistButton->SetIsEnabled(true);
+	bIsCharaterSelect = true; 
 	PlayerController->bIsDemon = true;
 }
 
@@ -42,9 +43,9 @@ void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 {
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(ExorcistCharacterClass);
-	bIsNotSelect = !bIsNotSelect;
 	ExocistButton->SetIsEnabled(false);
 	DemonButton->SetIsEnabled(true);
+	bIsCharaterSelect = true;
 	PlayerController->bIsDemon = false;
 }
 
@@ -67,3 +68,35 @@ void UUI_SelectCharacterPanel::BattleBeginningCountDown()
 		RemoveFromParent();
 	}
 }
+
+void UUI_SelectCharacterPanel::SelectCharacterBeginCountDown()
+{
+	if(bIsCharaterSelect)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
+	}
+	else
+	{
+		if(BattleBeginCountDown == 0)
+		{
+			//if at t = 0, there still not character selected
+			GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
+			bIsCharaterSelect = false;
+			auto PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
+			if(PlayerController->bIsDemon)
+			{
+				PlayerController->SelectCharacter(DemonCharacterClass);
+			}
+			else
+			{
+				PlayerController->SelectCharacter(ExorcistCharacterClass);
+			}
+		}
+		else
+		{
+			BattleBeginCountDown--;
+		}
+	}
+
+}
+
