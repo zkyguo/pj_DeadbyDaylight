@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "pj_DeadbyDaylight/Character/GameCharacter.h"
 #include "TimerManager.h"
+#include "DeadbyDaylightPlayerStart.h"
 #include "DeadbyDaylightGameMode.generated.h"
 
 /**
@@ -60,10 +62,26 @@ public :
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ADeadbyDaylightPlayerController*>ExorcistInGame;
 
-private:
+	/**
+	 * @brief Each pawn and his controller
+	 */
+	UPROPERTY(BlueprintReadWrite)
+	TMap<ADeadbyDaylightPlayerController*, AGameCharacter*> PlayerCharacterByController;
 
+	TArray<ADeadbyDaylightPlayerStart*> DemonPlayerStarts;
+	TArray<ADeadbyDaylightPlayerStart*> ExorcistPlayerStarts;
+
+	TArray<int32> EscapeKeyword;
+
+private:
+	/**
+	 * @brief Update Character Selection from other client
+	 */
 	UFUNCTION(BlueprintCallable)
 	void UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController,TSubclassOf<AGameCharacter> CharacterSelected);
+
+	UFUNCTION(BlueprintCallable)
+	void ReplicatePlayerCharacter();
 
 	/**
 	 * @brief Setup Game start.

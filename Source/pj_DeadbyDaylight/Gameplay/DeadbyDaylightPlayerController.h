@@ -79,6 +79,12 @@ public:
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ReceiveBattleBegin(int32 MyIndex, const TArray<int32>& DemonPlayersIndex);
 
+	/**
+	 * @brief S2C,Client receive character info from Server 
+	 */
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void ReceiveMyCharacter(AGameCharacter* MyCharacter);
+
 private:
 
 	

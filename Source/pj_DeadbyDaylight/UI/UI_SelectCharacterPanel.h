@@ -11,8 +11,6 @@
 #include "UI_SelectCharacterPanel.generated.h"
 
 
-
-
 /**
  * 
  */
@@ -51,9 +49,6 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExocistButton;
-
-	TSubclassOf<ADemonCharacter> DemonCharacterClass;
-	TSubclassOf<AExorcistCharacter> ExorcistCharacterClass;
 
 	UFUNCTION(BlueprintCallable)
 	void OnDemonButtonClick();

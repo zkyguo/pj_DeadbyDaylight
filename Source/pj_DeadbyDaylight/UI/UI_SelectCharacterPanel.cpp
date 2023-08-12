@@ -7,6 +7,7 @@
 #include "Gameplay/UI_BattleUI.h"
 #include "Gameplay/UI_EscapeKeyPanel.h"
 #include "pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h"
+#include "pj_DeadbyDaylight/Util/BlueprintClassFinder.h"
 
 
 UUI_SelectCharacterPanel::UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -32,7 +33,7 @@ void UUI_SelectCharacterPanel::NativeConstruct()
 void UUI_SelectCharacterPanel::OnDemonButtonClick()
 {
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
-	PlayerController->SelectCharacter(DemonCharacterClass);
+	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->DemonCharacterClass);
 	DemonButton->SetIsEnabled(false);
 	ExocistButton->SetIsEnabled(true);
 	bIsCharaterSelect = true; 
@@ -42,7 +43,7 @@ void UUI_SelectCharacterPanel::OnDemonButtonClick()
 void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 {
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
-	PlayerController->SelectCharacter(ExorcistCharacterClass);
+	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->ExorcistCharacterClass);
 	ExocistButton->SetIsEnabled(false);
 	DemonButton->SetIsEnabled(true);
 	bIsCharaterSelect = true;

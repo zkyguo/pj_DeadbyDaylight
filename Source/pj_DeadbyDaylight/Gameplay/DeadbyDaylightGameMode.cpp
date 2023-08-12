@@ -5,6 +5,8 @@
 #include "DeadbyDaylightPlayerController.h"
 #include "WaitingPlayerPawn.h"
 #include "DeadbyDaylightHUD.h"
+#include "Math/Sobol.h"
+#include "Kismet/GameplayStatics.h"
 
 ADeadbyDaylightGameMode::ADeadbyDaylightGameMode()
 {
@@ -68,10 +70,102 @@ void ADeadbyDaylightGameMode::UpdateSelectedCharacter(ADeadbyDaylightPlayerContr
 	}
 }
 
+
 void ADeadbyDaylightGameMode::BeginBattle()
 {
 	for (int32 i = 0; i < PlayersInGame.Num(); i++)
 	{
 		PlayersInGame[i]->ReceiveBattleBegin(i, DemonPlayerID);
+	}
+
+	TArray<AActor*>PlayerStarts;
+	UGameplayStatics::GetAllActorsOfClass(this, ADeadbyDaylightPlayerStart::StaticClass(), PlayerStarts);
+
+	for (int i = 0; i < PlayerStarts.Num(); i++)
+	{
+		ADeadbyDaylightPlayerStart* PlayerStart = Cast<ADeadbyDaylightPlayerStart>(PlayerStarts[i]);
+		if(PlayerStart->bIsDemon)
+		{
+			DemonPlayerStarts.Add(PlayerStart);
+		}
+		else
+		{
+			ExorcistPlayerStarts.Add(PlayerStart);
+		}
+	}
+
+	//Spawn Demon character to demon game start
+	TArray<ADeadbyDaylightPlayerStart*> Copy;
+	for (auto PlayerStart : DemonPlayerStarts)
+	{
+		Copy.Add(DuplicateObject<ADeadbyDaylightPlayerStart>(PlayerStart, PlayerStart->GetOuter(), TEXT("DemonStart")));
+	}
+
+	for (auto Player : DemonInGame)
+	{
+		Player->GetPawn()->Destroyed();
+		if(PlayersClass.Find(Player))
+		{
+			int32 randomIndex = FMath::RandRange(0, DemonPlayerStarts.Num());
+
+			FVector location = Copy[randomIndex]->GetActorTransform().GetLocation();
+			FRotator rotation(0, 0, 0);
+
+			auto DemonActor = GetWorld()->SpawnActor<AGameCharacter>(*PlayersClass.Find(Player),location, rotation);
+			Player->Possess(DemonActor);
+			PlayerCharacterByController.Add(Player, DemonActor);
+		}
+	}
+
+	Copy.Empty();
+	for (auto PlayerStart : ExorcistPlayerStarts)
+	{
+		Copy.Add(DuplicateObject<ADeadbyDaylightPlayerStart>(PlayerStart, PlayerStart->GetOuter(), TEXT("DemonStart")));
+	}
+	for (auto Player : ExorcistInGame)
+	{
+		Player->GetPawn()->Destroyed();
+		if (PlayersClass.Find(Player))
+		{
+			int32 randomIndex = FMath::RandRange(0, ExorcistPlayerStarts.Num());
+
+			FVector location = Copy[randomIndex]->GetActorTransform().GetLocation();
+			int32 StartSize = Copy[randomIndex]->CharacterStartSize;
+			FRotator rotation(0, 0, 0);
+
+			FSobol SobolGenerator;
+
+			FVector SpawnLocation(FMath::RandRange(location.X + StartSize* SobolGenerator.Next(0, 0, location.X)* -50., location.X + StartSize * SobolGenerator.Next(0, 0, location.X) * 50.),
+				FMath::RandRange(location.Y + StartSize * SobolGenerator.Next(0, 0, location.Y) * -50., location.Y + StartSize * SobolGenerator.Next(0, 0, location.Y) * 50.),
+				location.Z
+			);
+
+			auto ExorcistActor = GetWorld()->SpawnActor<AGameCharacter>(*PlayersClass.Find(Player), SpawnLocation, rotation);
+			Player->Possess(ExorcistActor);
+			PlayerCharacterByController.Add(Player, ExorcistActor);
+		}
+	}
+
+	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ThisClass::ReplicatePlayerCharacter, 1.1f);
+
+	//setup escape passsword
+	for(int i = 0;i < 4;i++)
+	{
+		int32 randomIndex = FMath::RandRange(0, 10);
+		EscapeKeyword.Add(randomIndex);
+	}
+
+	
+}
+
+void ADeadbyDaylightGameMode::ReplicatePlayerCharacter()
+{
+	for (auto player : PlayersInGame)
+	{
+		if(PlayerCharacterByController.Find(player))
+		{
+			player->ReceiveMyCharacter(*PlayerCharacterByController.Find(player));
+		}
 	}
 }
