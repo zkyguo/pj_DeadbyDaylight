@@ -23,16 +23,22 @@ public :
 	UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	bool bIsCharaterSelect = false;;
-
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	int32 BattleBeginCountDown = 30;
+	bool bIsNotCharaterSelect = true;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	FTimerHandle CountDownTimerHandler;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* CountDownText;
+
+	UPROPERTY(BlueprintReadWrite,meta = (BindWidget))
+	UButton* DemonButton;
+
+	UPROPERTY(BlueprintReadWrite,meta = (BindWidget))
+	UButton* ExocistButton;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	int32 BattleBeginCountDown = 30;
 
 	UFUNCTION(BlueprintCallable)
 	void BattleBeginningCountDown();
@@ -44,11 +50,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
-	UPROPERTY(meta = (BindWidget))
-	UButton* DemonButton;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* ExocistButton;
 
 	UFUNCTION(BlueprintCallable)
 	void OnDemonButtonClick();

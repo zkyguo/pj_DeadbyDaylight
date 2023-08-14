@@ -19,12 +19,10 @@ void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 My
 {
 	MyPlayerIndex = MyIndex;
 	DemonPlayersIndexInGame = DemonPlayersIndex;
-
-	HUD->SelectCharacterPanel->CountDownText->SetText(FText::FromString("Game will start soon!"));
 	GetWorld()->GetTimerManager().ClearTimer(HUD->SelectCharacterPanel->CountDownTimerHandler);
 	HUD->SelectCharacterPanel->BattleBeginCountDown = 5;
 
-	GetWorld()->GetTimerManager().SetTimer(HUD->SelectCharacterPanel->CountDownTimerHandler, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,false);
+	GetWorld()->GetTimerManager().SetTimer(HUD->SelectCharacterPanel->CountDownTimerHandler, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,true);
 }
 
 
@@ -35,7 +33,6 @@ void ADeadbyDaylightPlayerController::BeginPlay()
 	if (GetWorld()->IsNetMode(NM_Client) && IsLocalPlayerController())
 	{
 		HUD = Cast<ADeadbyDaylightHUD>(GetHUD());
-		
 
 		if (HUD->PreparePanelClass)
 		{
@@ -53,8 +50,6 @@ void ADeadbyDaylightPlayerController::BeginPlay()
 
 void ADeadbyDaylightPlayerController::StartSelectCharacter_Implementation()
 {
-	
-
 	if(HUD->SelectCharacterClass)
 	{
 		HUD->SelectCharacterPanel = CreateWidget<UUI_SelectCharacterPanel>(this, HUD->SelectCharacterClass);
@@ -88,20 +83,27 @@ void ADeadbyDaylightPlayerController::SelectCharacter_Implementation(TSubclassOf
 {
 	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(GetWorld()->GetAuthGameMode());
 
-	
-
+	GameMode->UpdateSelectedCharacter(this, CharacterSelect);
 }
 
 void ADeadbyDaylightPlayerController::ReceiveCharacterSelect_Implementation(int32 OtherIndex, FName PlayerName,
 	TSubclassOf<AGameCharacter> SelectedCharacter)
 {
-	UE_LOG(LogTemp,Warning,TEXT("Player %d selects %s as character"), OtherIndex, *SelectedCharacter->GetName())
+	bool islocal = IsLocalPlayerController();
+	UE_LOG(LogTemp,Warning,TEXT("Player %d selects %s as character, is local : %hhd"), OtherIndex, *SelectedCharacter->GetName(), islocal)
 }
 
 
 void ADeadbyDaylightPlayerController::ReceiveMyCharacter_Implementation(AGameCharacter* MyCharacter)
 {
-	
+	if (Cast<AExorcistCharacter>(MyCharacter))
+	{
+		MyDemonCharacter = Cast<ADemonCharacter>(MyCharacter);
+	}
+	else if (Cast<AExorcistCharacter>(MyCharacter))
+	{
+		MyExorcistCharacte = Cast<AExorcistCharacter>(MyCharacter);
+	}
 }
 
 

@@ -22,8 +22,15 @@ public :
 
 
 	/**
+	 * @brief Update Character Selection from other client
+	 */
+	UFUNCTION(BlueprintCallable)
+	void UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController, TSubclassOf<AGameCharacter> CharacterSelected);
+
+	/**
 	 * @brief Server send Client the players who joined game
 	 */
+	UFUNCTION(BlueprintCallable)
 	void ReceiveClientReload(ADeadbyDaylightPlayerController* player, bool isPlayerGhost, int32 PlayerInGame, const FText& playerName, UTexture2D* PlayerIcon);
 
 	/**
@@ -74,11 +81,7 @@ public :
 	TArray<int32> EscapeKeyword;
 
 private:
-	/**
-	 * @brief Update Character Selection from other client
-	 */
-	UFUNCTION(BlueprintCallable)
-	void UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController,TSubclassOf<AGameCharacter> CharacterSelected);
+	
 
 	UFUNCTION(BlueprintCallable)
 	void ReplicatePlayerCharacter();

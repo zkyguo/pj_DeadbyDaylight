@@ -12,19 +12,13 @@
 
 UUI_SelectCharacterPanel::UUI_SelectCharacterPanel(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	
-	static ConstructorHelpers::FClassFinder<ADemonCharacter> DemonCharacter_BPClass(TEXT("/Game/Game/Character/BP_DemonCharacter"));
-	DemonCharacterClass = DemonCharacter_BPClass.Class;
-
-	static ConstructorHelpers::FClassFinder<AExorcistCharacter> ExorcistCharacter_BPClass(TEXT("/Game/Game/Character/BP_ExorcistCharacter"));
-	ExorcistCharacterClass = ExorcistCharacter_BPClass.Class;
 
 }
 
 void UUI_SelectCharacterPanel::NativeConstruct()
 {
 	Super::NativeConstruct();
-
+	UE_LOG(LogTemp, Warning, TEXT("%s"),*this->GetName());
 	DemonButton->OnClicked.AddDynamic(this, &ThisClass::OnDemonButtonClick);
 	ExocistButton->OnClicked.AddDynamic(this, &ThisClass::OnExorcistButtonClick);
 
@@ -34,9 +28,9 @@ void UUI_SelectCharacterPanel::OnDemonButtonClick()
 {
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->DemonCharacterClass);
+	bIsNotCharaterSelect = false;
 	DemonButton->SetIsEnabled(false);
 	ExocistButton->SetIsEnabled(true);
-	bIsCharaterSelect = true; 
 	PlayerController->bIsDemon = true;
 }
 
@@ -44,22 +38,24 @@ void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 {
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->ExorcistCharacterClass);
+	bIsNotCharaterSelect = false;
 	ExocistButton->SetIsEnabled(false);
 	DemonButton->SetIsEnabled(true);
-	bIsCharaterSelect = true;
 	PlayerController->bIsDemon = false;
 }
 
 void UUI_SelectCharacterPanel::BattleBeginningCountDown()
 {
+	ADeadbyDaylightHUD* HUD = Cast<ADeadbyDaylightHUD>(GetOwningPlayer()->GetHUD());
 	if(BattleBeginCountDown != 0)
 	{
 		BattleBeginCountDown--;
 	}
 	else
 	{
+		HUD->SelectCharacterPanel->CountDownText->SetText(FText::FromString("Game will start soon!"));
 		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
-		ADeadbyDaylightHUD* HUD = Cast<ADeadbyDaylightHUD>(GetOwningPlayer()->GetHUD());
+		
 		HUD->BattleUI = CreateWidget<UUI_BattleUI>(GetOwningPlayer(), HUD->BattleUIClass);
 		HUD->BattleUI->AddToViewport();
 
@@ -72,7 +68,7 @@ void UUI_SelectCharacterPanel::BattleBeginningCountDown()
 
 void UUI_SelectCharacterPanel::SelectCharacterBeginCountDown()
 {
-	if(bIsCharaterSelect)
+	if(!bIsNotCharaterSelect)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
 	}
@@ -82,15 +78,15 @@ void UUI_SelectCharacterPanel::SelectCharacterBeginCountDown()
 		{
 			//if at t = 0, there still not character selected
 			GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
-			bIsCharaterSelect = false;
+			bIsNotCharaterSelect = true;
 			auto PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 			if(PlayerController->bIsDemon)
 			{
-				PlayerController->SelectCharacter(DemonCharacterClass);
+				PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->DemonCharacterClass);
 			}
 			else
 			{
-				PlayerController->SelectCharacter(ExorcistCharacterClass);
+				PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->ExorcistCharacterClass);
 			}
 		}
 		else

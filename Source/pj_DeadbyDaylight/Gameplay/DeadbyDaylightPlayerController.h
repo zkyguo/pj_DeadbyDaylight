@@ -43,6 +43,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<int32> DemonPlayersIndexInGame;
 
+	ADemonCharacter* MyDemonCharacter;
+	AExorcistCharacter* MyExorcistCharacte;
+
 	/**
 	 * @brief C2S, Client Send player Join Game request to Server
 	 */
