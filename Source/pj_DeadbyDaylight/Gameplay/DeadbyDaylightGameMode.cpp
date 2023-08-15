@@ -116,13 +116,14 @@ void ADeadbyDaylightGameMode::UpdateSelectedCharacter(ADeadbyDaylightPlayerContr
 	}
 	if(PlayersClass.Num() == PlayersInGame.Num())
 	{
+		FTimerHandle TimerHandle;
 		//Begin Battle start count down
-		GetWorldTimerManager().SetTimer(GameTimerHandle, this, &ThisClass::BeginBattle, 5.1f, false);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::BeginBattle, 5.1f, false);
 		for (int32 i = 0; i < PlayersInGame.Num(); i++)
 		{
 			PlayersInGame[i]->ReceiveBattleBegin(i, DemonPlayerID);
 		}
-
+	
 		GetWorldTimerManager().SetTimer(GameTimerHandle, this, &ThisClass::BattleTimeCountDown, .997f, true);
 	}
 }
@@ -198,8 +199,8 @@ void ADeadbyDaylightGameMode::BeginBattle()
 		}
 	}
 
-	
-	GetWorld()->GetTimerManager().SetTimer(GameTimerHandle, this, &ThisClass::ReplicatePlayerCharacter, 1.1f);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ThisClass::ReplicatePlayerCharacter, 1.1f);
 
 	//setup escape passsword
 	for(int i = 0;i < 4;i++)

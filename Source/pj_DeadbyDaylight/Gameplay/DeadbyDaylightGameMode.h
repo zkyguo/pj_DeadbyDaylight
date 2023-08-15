@@ -104,8 +104,7 @@ private:
 
 	TMap<ADeadbyDaylightPlayerController*, TSubclassOf<AGameCharacter>> PlayersClass;
 	FTimerHandle GameTimerHandle;
-
 public :
 	//Game Timer
-	int32 GameTimeCountDown = 600;
+	int32 GameTimeCountDown = 605;
 };

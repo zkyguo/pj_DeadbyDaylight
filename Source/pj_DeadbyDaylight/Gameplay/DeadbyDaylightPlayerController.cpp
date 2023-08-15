@@ -14,18 +14,6 @@ ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
 }
 
-
-void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 MyIndex, const TArray<int32>& DemonPlayersIndex)
-{
-	MyPlayerIndex = MyIndex;
-	DemonPlayersIndexInGame = DemonPlayersIndex;
-	GetWorld()->GetTimerManager().ClearTimer(HUD->SelectCharacterPanel->CountDownTimerHandler);
-	HUD->SelectCharacterPanel->BattleBeginCountDown = 5;
-
-	GetWorld()->GetTimerManager().SetTimer(HUD->SelectCharacterPanel->CountDownTimerHandler, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,true);
-}
-
-
 void ADeadbyDaylightPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -46,6 +34,20 @@ void ADeadbyDaylightPlayerController::BeginPlay()
 	}
 }
 
+
+void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 MyIndex, const TArray<int32>& DemonPlayersIndex)
+{
+	MyPlayerIndex = MyIndex;
+	DemonPlayersIndexInGame = DemonPlayersIndex;
+	GetWorld()->GetTimerManager().ClearTimer(HUD->SelectCharacterPanel->CountDownTimerHandler);
+	HUD->SelectCharacterPanel->BattleBeginCountDown = 5;
+
+	GetWorld()->GetTimerManager().SetTimer(HUD->SelectCharacterPanel->CountDownTimerHandler, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,true);
+
+	SetShowMouseCursor(false);
+
+	GetWorld()->GetTimerManager().SetTimer(BattleCountDownHanderOnClient, this,&ThisClass::BattleTimeDownOnClient , .997f, true);
+}
 
 
 void ADeadbyDaylightPlayerController::StartSelectCharacter_Implementation()
@@ -109,6 +111,7 @@ void ADeadbyDaylightPlayerController::ReceiveMyCharacter_Implementation(AGameCha
 
 void ADeadbyDaylightPlayerController::ReplicatedBattleTime_Implementation(int32 BattleTime)
 {
+	BattleTimerCountDownOnClient = BattleTime;
 }
 
 
@@ -117,5 +120,22 @@ void ADeadbyDaylightPlayerController::ReceiveGameOverMessage_Implementation(bool
 }
 
 
+void ADeadbyDaylightPlayerController::BattleTimeDownOnClient()
+{
+	if(!isGameOver)
+	{
+		BattleTimerCountDownOnClient--;
+		if (BattleTimerCountDownOnClient < 0)
+		{
+			GetWorld()->GetTimerManager().ClearTimer(BattleCountDownHanderOnClient);
+		}
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().ClearTimer(BattleCountDownHanderOnClient);
+	}
+	
+
+}
 
 

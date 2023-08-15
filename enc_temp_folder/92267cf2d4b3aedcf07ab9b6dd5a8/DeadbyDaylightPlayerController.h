@@ -46,6 +46,9 @@ public:
 	ADemonCharacter* MyDemonCharacter;
 	AExorcistCharacter* MyExorcistCharacte;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool isGameOver;
+
 	/**
 	 * @brief C2S, Client Send player Join Game request to Server
 	 */
@@ -88,8 +91,24 @@ public:
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ReceiveMyCharacter(AGameCharacter* MyCharacter);
 
-private:
+	/**
+	 * @brief S2C, Client receive Game battle time from server
+	 */
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void ReplicatedBattleTime(int32 BattleTime);
 
+	/**
+	 * @brief S2C, Client receive Game Result from server
+	 * @param isVictory 
+	 */
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void ReceiveGameOverMessage(bool isVictory);
 	
+public:
 
+	UPROPERTY(BlueprintReadWrite)
+	int32 BattleTimerCountDownOnClient = 600;
+
+	FTimerHandle BattleCountDownHanderOnClient;
+	void BattleTimeDownOnClient();
 };
