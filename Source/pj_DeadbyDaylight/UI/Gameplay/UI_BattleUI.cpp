@@ -3,3 +3,8 @@
 
 #include "UI_BattleUI.h"
 
+void UUI_BattleUI::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+}

@@ -111,4 +111,5 @@ public:
 
 	FTimerHandle BattleCountDownHanderOnClient;
 	void BattleTimeDownOnClient();
+	void SetIsDemon(bool isDemon);
 };

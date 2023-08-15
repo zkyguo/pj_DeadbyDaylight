@@ -138,4 +138,9 @@ void ADeadbyDaylightPlayerController::BattleTimeDownOnClient()
 
 }
 
+void ADeadbyDaylightPlayerController::SetIsDemon(bool isDemon)
+{
+	bIsDemon = isDemon;
+}
+
 

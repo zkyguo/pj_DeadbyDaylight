@@ -16,6 +16,9 @@ class PJ_DEADBYDAYLIGHT_API UUI_BattleUI : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void NativeConstruct() override;
+
 public:
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)

@@ -26,7 +26,7 @@ void ADeadbyDaylightGameMode::ReceiveClientReload(ADeadbyDaylightPlayerControlle
 		PlayerAvatars.Add(PlayerIcon);
 		PlayerGold.Add(player, 0);
 
-		if (isPlayerDemon)
+		if (playerIndex == 0)
 		{
 			DemonInGame.Add(player);
 			DemonPlayerID.Add(playerIndex);
