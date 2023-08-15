@@ -67,13 +67,39 @@ void ADeadbyDaylightGameMode::BattleTimeCountDown()
 				Player->ReplicatedBattleTime(GameTimeCountDown);
 			}
 		}
+		else
+		{
+			//If Exorcist escaped, send win message
+			for (auto Player : PlayersInGame)
+			{
+				for (int32 PlayerIndex : EscapedExorcistPlayerIndex)
+				{
+					if(Player->MyPlayerIndex == PlayerIndex)
+					{
+						Player->ReceiveGameOverMessage(true);
+						continue;
+					}
+				}
+			}
+
+		}
 	}
 	else
 	{
 		GetWorld()->GetTimerManager().ClearTimer(GameTimerHandle);
+		//If there still exorcist didnt escaped, the exorcist loses
 		if(EscapedExorcistPlayerIndex.Num() > 0)
 		{
 			
+			for (auto Player : ExorcistInGame)
+			{
+				Player->ReceiveGameOverMessage(false);
+			}
+
+			for (auto Player : DemonInGame)
+			{
+				Player->ReceiveGameOverMessage(true);
+			}
 		}
 	}
 }

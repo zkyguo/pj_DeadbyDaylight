@@ -14,6 +14,7 @@ ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
 }
 
+
 void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 MyIndex, const TArray<int32>& DemonPlayersIndex)
 {
 	MyPlayerIndex = MyIndex;
@@ -111,7 +112,9 @@ void ADeadbyDaylightPlayerController::ReplicatedBattleTime_Implementation(int32 
 }
 
 
-
+void ADeadbyDaylightPlayerController::ReceiveGameOverMessage_Implementation(bool isVictory)
+{
+}
 
 
 

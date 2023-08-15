@@ -94,8 +94,8 @@ public:
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ReplicatedBattleTime(int32 BattleTime);
 
-private:
-
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void ReceiveGameOverMessage(bool isVictory);
 	
 
 };
