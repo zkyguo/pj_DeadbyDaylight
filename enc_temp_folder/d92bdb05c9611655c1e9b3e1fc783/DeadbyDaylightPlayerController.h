@@ -88,12 +88,6 @@ public:
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ReceiveMyCharacter(AGameCharacter* MyCharacter);
 
-	/**
-	 * @brief S2C, Client receive Game battle time from server
-	 */
-	UFUNCTION(BlueprintCallable, Client, Reliable)
-	void ReplicatedBattleTime(int32 BattleTime);
-
 private:
 
 	
