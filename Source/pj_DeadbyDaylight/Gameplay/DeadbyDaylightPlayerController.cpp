@@ -160,20 +160,38 @@ void ADeadbyDaylightPlayerController::WhenApprochObject()
 			{
 				TArray<AActor*> AllDemon;
 				UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemonCharacter::StaticClass(), AllDemon);
+				bool isNearDemonNow = false; //Is demon approach during this function runs?
 				for (auto Demon : AllDemon)
 				{
 					float Distance = (Demon->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
 					float HeightDifference = Demon->GetActorLocation().Z - GetPawn()->GetActorLocation().Z;
 					if(Distance<800 && FMath::Abs(HeightDifference) < 100)
 					{
-						isNearDemon = true;
+						isNearDemonNow = true;
 						break;
 					}
 
 				}
 
-				if(isNearDemon)
+				//If a demon approachs during this func runs
+				if(isNearDemonNow)
 				{
+					//Update isNearDemon
+					if(!isNearDemon)
+					{
+						HUD->ActiveDemonClose(true, this);
+						isNearDemon = true;
+					}
+
+				}
+				else
+				{
+					//Demon is get away of player(before yes, now no)
+					if(isNearDemon)
+					{
+						HUD->ActiveDemonClose(false, this);
+						isNearDemon = false;
+					}
 					
 				}
 			}
