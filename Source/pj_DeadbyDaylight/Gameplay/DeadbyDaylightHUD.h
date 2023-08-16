@@ -8,8 +8,8 @@
 #include <pj_DeadbyDaylight/UI/UI_SelectCharacterPanel.h>
 #include <pj_DeadbyDaylight/UI/Gameplay/UI_BattleUI.h>
 #include <pj_DeadbyDaylight/UI/Gameplay/UI_EscapeKeyPanel.h>
+#include <pj_DeadbyDaylight/UI/Gameplay/UI_DemonApproach.h>
 #include "DeadbyDaylightHUD.generated.h"
-
 
 
 
@@ -36,8 +36,17 @@ public :
 	UPROPERTY(BlueprintReadWrite)
 	UUI_EscapeKeyPanel* EscapeKeyPanel;
 
+	UPROPERTY(BlueprintReadWrite)
+	UUI_DemonApproach* DemonApproach;
+
 	TSubclassOf<UUI_EscapeKeyPanel> EscapeKeyPanelClass;
 	TSubclassOf<UUI_BattleUI> BattleUIClass;
 	TSubclassOf<UUI_PreparePanel> PreparePanelClass;
 	TSubclassOf<UUI_SelectCharacterPanel> SelectCharacterClass;
+	TSubclassOf<UUI_DemonApproach> DemonApproachClass;
+
+public :
+
+	UFUNCTION(BlueprintCallable, Category = "In Game Operation")
+	void ActiveDemonClose(bool isActive, class ADeadbyDaylightPlayerController* PlayerController);
 };

@@ -7,6 +7,7 @@
 #include "DeadbyDaylightHUD.h"
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
 #include <pj_DeadbyDaylight/Character/GameCharacter.h>
+#include "pj_DeadbyDaylight/Enum/EPlayerState.h"
 #include "DeadbyDaylightPlayerController.generated.h"
 
 
@@ -48,6 +49,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool isGameOver;
+
+	UPROPERTY(BlueprintReadWrite)
+	EPlayerState CharacterState;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isNearDemon;
 
 	/**
 	 * @brief C2S, Client Send player Join Game request to Server
@@ -112,4 +119,10 @@ public:
 	FTimerHandle BattleCountDownHanderOnClient;
 	void BattleTimeDownOnClient();
 	void SetIsDemon(bool isDemon);
+
+	/**
+	 * @brief Dectect if player is approching an object
+	 */
+	void WhenApprochObject();
+	
 };

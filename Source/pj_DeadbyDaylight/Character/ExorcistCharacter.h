@@ -13,5 +13,10 @@ UCLASS()
 class PJ_DEADBYDAYLIGHT_API AExorcistCharacter : public AGameCharacter
 {
 	GENERATED_BODY()
-	
+
+public :
+	AExorcistCharacter();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite,Category = Sound, meta = (AllowPrivateAccess = "true"))
+	UAudioComponent* HeartBeat;
 };

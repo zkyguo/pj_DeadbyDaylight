@@ -3,7 +3,6 @@
 
 #include "DeadbyDaylightHUD.h"
 #include "DeadbyDaylightPlayerController.h"
-#include "Components/AudioComponent.h"
 
 ADeadbyDaylightHUD::ADeadbyDaylightHUD()
 {
@@ -33,19 +32,10 @@ void ADeadbyDaylightHUD::ActiveDemonClose(bool isActive, ADeadbyDaylightPlayerCo
 	if(isActive)
 	{
 		DemonApproach->AddToViewport();
-		
-		if(AExorcistCharacter* Character = Cast<AExorcistCharacter>(GetOwningPawn()))
-		{
-			Character->HeartBeat->SetActive(true, true);
-		}
 	}
 	else
 	{
 		DemonApproach->RemoveFromParent();
-		if (AExorcistCharacter* Character = Cast<AExorcistCharacter>(GetOwningPawn()))
-		{
-			Character->HeartBeat->Deactivate();
-		}
 	}
 }
 

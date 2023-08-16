@@ -3,6 +3,7 @@
 
 #include "DeadbyDaylightPlayerController.h"
 #include "DeadbyDaylightGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "pj_DeadbyDaylight/UI/UI_PreparePanel.h"
 #include "pj_DeadbyDaylight/UI/UI_SelectCharacterPanel.h"
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
@@ -47,6 +48,8 @@ void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 My
 	SetShowMouseCursor(false);
 
 	GetWorld()->GetTimerManager().SetTimer(BattleCountDownHanderOnClient, this,&ThisClass::BattleTimeDownOnClient , .997f, true);
+	FTimerHandle ApprochObjectTH;
+	GetWorld()->GetTimerManager().SetTimer(ApprochObjectTH, this, &ThisClass::WhenApprochObject, .13f, true);
 }
 
 
@@ -141,6 +144,41 @@ void ADeadbyDaylightPlayerController::BattleTimeDownOnClient()
 void ADeadbyDaylightPlayerController::SetIsDemon(bool isDemon)
 {
 	bIsDemon = isDemon;
+}
+
+void ADeadbyDaylightPlayerController::WhenApprochObject()
+{
+	if(GetPawn())
+	{
+		if(bIsDemon)
+		{
+			
+		}
+		else
+		{
+			if(CharacterState != EPlayerState::HitDown && CharacterState != EPlayerState::OnSacrifice)
+			{
+				TArray<AActor*> AllDemon;
+				UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemonCharacter::StaticClass(), AllDemon);
+				for (auto Demon : AllDemon)
+				{
+					float Distance = (Demon->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
+					float HeightDifference = Demon->GetActorLocation().Z - GetPawn()->GetActorLocation().Z;
+					if(Distance<800 && FMath::Abs(HeightDifference) < 100)
+					{
+						isNearDemon = true;
+						break;
+					}
+
+				}
+
+				if(isNearDemon)
+				{
+					
+				}
+			}
+		}
+	}
 }
 
 

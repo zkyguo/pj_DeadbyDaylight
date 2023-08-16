@@ -29,7 +29,7 @@ void UUI_SelectCharacterPanel::OnDemonButtonClick()
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->DemonCharacterClass);
 	bIsNotCharaterSelect = false;
-	PlayerController->SetIsDemon(true);
+	PlayerController->bIsDemon = true;
 	DemonButton->SetIsEnabled(false);
 	ExocistButton->SetIsEnabled(true);
 	
@@ -40,7 +40,7 @@ void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
 	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->ExorcistCharacterClass);
 	bIsNotCharaterSelect = false;
-	PlayerController->SetIsDemon(false);
+	PlayerController->bIsDemon = false;
 	ExocistButton->SetIsEnabled(false);
 	DemonButton->SetIsEnabled(true);
 	

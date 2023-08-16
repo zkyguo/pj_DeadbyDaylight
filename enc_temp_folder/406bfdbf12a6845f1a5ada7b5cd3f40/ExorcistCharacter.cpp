@@ -9,5 +9,4 @@ AExorcistCharacter::AExorcistCharacter()
 {
 	HeartBeat = CreateDefaultSubobject<UAudioComponent>(TEXT("Heart Beat Wav"));
 	HeartBeat->AttachToComponent(RootComponent,FAttachmentTransformRules::KeepRelativeTransform);
-	
 }
