@@ -8,6 +8,8 @@
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
 #include <pj_DeadbyDaylight/Character/GameCharacter.h>
 #include "pj_DeadbyDaylight/Enum/EPlayerState.h"
+#include "pj_DeadbyDaylight/LevelFactory/Generator.h"
+#include <pj_DeadbyDaylight/Enum/EGameItemType.h>
 #include "DeadbyDaylightPlayerController.generated.h"
 
 
@@ -56,6 +58,14 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool isNearDemon;
 
+	UPROPERTY(BlueprintReadWrite)
+	EGameItemType NearItemType;
+
+	UPROPERTY(BlueprintReadWrite)
+	AGenerator* InteractingGenerator;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isAllEscapedKeyHasBeenFound = false;
 	/**
 	 * @brief C2S, Client Send player Join Game request to Server
 	 */

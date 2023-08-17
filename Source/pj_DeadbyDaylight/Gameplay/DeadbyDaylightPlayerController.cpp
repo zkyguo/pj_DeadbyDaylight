@@ -9,6 +9,7 @@
 #include "pj_DeadbyDaylight/LevelElement/ElementManager.h"
 
 
+
 ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 {
 	
@@ -194,6 +195,54 @@ void ADeadbyDaylightPlayerController::WhenApprochObject()
 					}
 					
 				}
+
+				if(!isAllEscapedKeyHasBeenFound)
+				{
+					if (NearItemType == EGameItemType::Generator)
+					{
+						float Distance = (InteractingGenerator->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
+						if (Distance < 200 && !InteractingGenerator->isRepaired)
+						{
+
+						}
+						//If there are a generator near you and another player just fix it, try to find other generator
+						else
+						{
+							NearItemType = EGameItemType::None;
+							TArray<AActor*> AllGenerator;
+							UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGenerator::StaticClass(), AllGenerator);
+							for (auto gen : AllGenerator)
+							{
+								float Distance = (gen->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
+								AGenerator* Generator = Cast<AGenerator>(gen);
+								if (Distance < 200 && Generator->isRepaired == false)
+								{
+									NearItemType = EGameItemType::Generator;
+									InteractingGenerator = Generator;
+									break;
+								}
+							}
+						}
+					}
+					else
+					{
+						NearItemType = EGameItemType::None;
+						TArray<AActor*> AllGenerator;
+						UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGenerator::StaticClass(), AllGenerator);
+						for (auto gen : AllGenerator)
+						{
+							float Distance = (gen->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
+							AGenerator* Generator = Cast<AGenerator>(gen);
+							if (Distance < 200 && Generator->isRepaired == false)
+							{
+								NearItemType = EGameItemType::Generator;
+								InteractingGenerator = Generator;
+								break;
+							}
+						}
+					}
+				}
+				
 			}
 		}
 	}
