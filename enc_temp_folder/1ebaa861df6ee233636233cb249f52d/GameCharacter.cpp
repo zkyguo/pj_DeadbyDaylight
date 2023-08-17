@@ -14,9 +14,6 @@
 
 AGameCharacter::AGameCharacter()
 {
-	//Get local player controller
-	PlayerController = Cast<ADeadbyDaylightPlayerController>(GetController());
-
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 

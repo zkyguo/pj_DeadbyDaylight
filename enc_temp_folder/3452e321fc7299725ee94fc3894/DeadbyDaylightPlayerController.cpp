@@ -14,7 +14,6 @@ ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 {
 	
 	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
-	
 }
 
 void ADeadbyDaylightPlayerController::BeginPlay()

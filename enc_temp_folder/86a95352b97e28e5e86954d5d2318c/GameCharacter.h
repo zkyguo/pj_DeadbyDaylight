@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include <pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h>
 #include "GameCharacter.generated.h"
-
 
 UCLASS()
 class PJ_DEADBYDAYLIGHT_API AGameCharacter : public ACharacter
@@ -28,9 +26,6 @@ public:
 	float TurnRateGamepad;
 
 protected:
-
-	UPROPERTY(BlueprintReadOnly)
-	ADeadbyDaylightPlayerController* PlayerController;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

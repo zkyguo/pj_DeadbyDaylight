@@ -52,8 +52,6 @@ public :
 	UFUNCTION(BlueprintCallable, Category = "During Game")
 	void BattleTimeCountDown();
 
-	UFUNCTION(BlueprintCallable, Category = "During Game")
-	void RepairGenerator(AExorcistCharacter* repairPlayer, AGenerator* Generator, ADeadbyDaylightPlayerController* RepairPlayerController);
 
 	/**
 	 * @brief All player in game
