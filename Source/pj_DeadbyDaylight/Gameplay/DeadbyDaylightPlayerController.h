@@ -120,13 +120,28 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Client, Reliable)
 	void ReceiveGameOverMessage(bool isVictory);
-	
+
+	/**
+	 * @brief Update Repairing message to all client that there are a generator is repairing
+	 */
+	UFUNCTION(BlueprintCallable, Client, Reliable)
+	void StartOrStopRepairForAllPlayer(const TArray<AExorcistCharacter*>& RepairingPlayers,
+			bool isRepairingStart,
+			const TArray<int32>& RepairingPlayerIndex,
+			AGenerator* RepairGenerator,
+			bool isStopByHit);
+
 public:
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 BattleTimerCountDownOnClient = 605;
 
+	UPROPERTY(BlueprintReadWrite)
 	FTimerHandle BattleCountDownHanderOnClient;
+
+	UPROPERTY(BlueprintReadWrite)
+	TMap<int32, EPlayerState> PlayerStateByIndex;
+
 	void BattleTimeDownOnClient();
 	void SetIsDemon(bool isDemon);
 
@@ -134,5 +149,6 @@ public:
 	 * @brief Dectect if player is approching an object
 	 */
 	void WhenApprochObject();
+
 	
 };

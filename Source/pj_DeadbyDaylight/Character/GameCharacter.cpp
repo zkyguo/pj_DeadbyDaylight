@@ -7,15 +7,15 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include <pj_DeadbyDaylight/Gameplay/DeadbyDaylightPlayerController.h>
 #include "GameFramework/SpringArmComponent.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 // Apj_DeadbyDaylightCharacter
 
 AGameCharacter::AGameCharacter()
 {
-	//Get local player controller
-	PlayerController = Cast<ADeadbyDaylightPlayerController>(GetController());
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -81,6 +81,11 @@ void AGameCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGameCharacter::TouchStopped);
 }
 
+void AGameCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AGameCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	Jump();
@@ -89,6 +94,15 @@ void AGameCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Locatio
 void AGameCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	StopJumping();
+}
+
+void AGameCharacter::PushCameraBack(bool isPush, float PushLength)
+{
+	if(CameraBoom->TargetArmLength != 0.f)
+	{
+		GetMesh()->SetOwnerNoSee(false);
+		bUseControllerRotationYaw = false;
+	}
 }
 
 void AGameCharacter::TurnAtRate(float Rate)

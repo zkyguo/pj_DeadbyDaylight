@@ -107,6 +107,30 @@ void ADeadbyDaylightGameMode::BattleTimeCountDown()
 void ADeadbyDaylightGameMode::RepairGenerator(AExorcistCharacter* repairPlayer, AGenerator* Generator,
 	ADeadbyDaylightPlayerController* RepairPlayerController)
 {
+	if(!repairPlayer->isRepairingGenerator && !repairPlayer->isHitDown && repairPlayer && !repairPlayer->isUsingSkill)
+	{
+		repairPlayer->isRepairingGenerator = true;
+		Generator->RepairingPlayerLocation.Add(repairPlayer, repairPlayer->GetActorLocation());
+		repairPlayer->bUseControllerRotationYaw = false;
+		if(!Generator->RepaireGeneratorHandle.IsValid())
+		{
+			GetWorld()->GetTimerManager().SetTimer(Generator->RepaireGeneratorHandle, Generator, &AGenerator::AppendRepairGenerator, 1.1f, true);
+		}
+		repairPlayer->MyPlayerStartRepairGenerator();
+
+		TArray<AExorcistCharacter*> RepairPlayers;
+		RepairPlayers.Add(repairPlayer);
+
+		TArray<int32> RepairPlayersIndex;
+		
+
+		for (int8 i = 0; i < ExorcistInGame.Num(); ++i)
+		{
+			RepairPlayersIndex.Add(i); //Index here is not the index of player, it is the index use for Exorcist Status Bar
+			ExorcistInGame[i]->StartOrStopRepairForAllPlayer(RepairPlayers, true, RepairPlayersIndex, Generator, false);
+		}
+	}
+	
 }
 
 void ADeadbyDaylightGameMode::UpdateSelectedCharacter(ADeadbyDaylightPlayerController* PlayerController,

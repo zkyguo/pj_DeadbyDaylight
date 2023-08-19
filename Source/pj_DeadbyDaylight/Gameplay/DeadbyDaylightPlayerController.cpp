@@ -125,6 +125,30 @@ void ADeadbyDaylightPlayerController::ReceiveGameOverMessage_Implementation(bool
 }
 
 
+void ADeadbyDaylightPlayerController::StartOrStopRepairForAllPlayer_Implementation(
+	const TArray<AExorcistCharacter*>& RepairingPlayers, bool isRepairingStart,
+	const TArray<int32>& RepairingPlayerIndex, AGenerator* RepairGenerator, bool isStopByHit)
+{
+	for (int8 i = 0; i < RepairingPlayers.Num(); ++i)
+	{
+		RepairingPlayers[i]->isRepairingGenerator = isRepairingStart;
+		if (!isStopByHit)
+		{
+			if(isRepairingStart)
+			{
+				PlayerStateByIndex.Add(RepairingPlayers[i]->GetPlayerIndex(), EPlayerState::Repairing);
+			}
+			else
+			{
+				PlayerStateByIndex.Add(RepairingPlayers[i]->GetPlayerIndex(), EPlayerState::Normal);
+			}
+			
+		}
+
+	}
+	RepairGenerator->StartOrStopRepairing(isRepairingStart);
+}
+
 void ADeadbyDaylightPlayerController::BattleTimeDownOnClient()
 {
 	if(!isGameOver)
@@ -229,6 +253,7 @@ void ADeadbyDaylightPlayerController::WhenApprochObject()
 						NearItemType = EGameItemType::None;
 						TArray<AActor*> AllGenerator;
 						UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGenerator::StaticClass(), AllGenerator);
+
 						for (auto gen : AllGenerator)
 						{
 							float Distance = (gen->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
@@ -247,5 +272,7 @@ void ADeadbyDaylightPlayerController::WhenApprochObject()
 		}
 	}
 }
+
+
 
 
