@@ -122,11 +122,9 @@ void ADeadbyDaylightGameMode::RepairGenerator(AExorcistCharacter* repairPlayer, 
 		RepairPlayers.Add(repairPlayer);
 
 		TArray<int32> RepairPlayersIndex;
-		
-
+		RepairPlayersIndex.Add(RepairPlayerController->MyPlayerIndex);
 		for (int8 i = 0; i < ExorcistInGame.Num(); ++i)
 		{
-			RepairPlayersIndex.Add(i); //Index here is not the index of player, it is the index use for Exorcist Status Bar
 			ExorcistInGame[i]->StartOrStopRepairForAllPlayer(RepairPlayers, true, RepairPlayersIndex, Generator, false);
 		}
 	}
