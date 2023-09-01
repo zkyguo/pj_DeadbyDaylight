@@ -26,10 +26,7 @@ void UUI_SelectCharacterPanel::NativeConstruct()
 
 void UUI_SelectCharacterPanel::OnDemonButtonClick()
 {
-	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
-	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->DemonCharacterClass);
-	bIsNotCharaterSelect = false;
-	PlayerController->bIsDemon = true;
+
 	DemonButton->SetIsEnabled(false);
 	ExocistButton->SetIsEnabled(true);
 	
@@ -37,10 +34,6 @@ void UUI_SelectCharacterPanel::OnDemonButtonClick()
 
 void UUI_SelectCharacterPanel::OnExorcistButtonClick()
 {
-	ADeadbyDaylightPlayerController* PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
-	PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->ExorcistCharacterClass);
-	bIsNotCharaterSelect = false;
-	PlayerController->bIsDemon = false;
 	ExocistButton->SetIsEnabled(false);
 	DemonButton->SetIsEnabled(true);
 	
@@ -82,14 +75,6 @@ void UUI_SelectCharacterPanel::SelectCharacterBeginCountDown()
 			GetWorld()->GetTimerManager().ClearTimer(CountDownTimerHandler);
 			bIsNotCharaterSelect = true;
 			auto PlayerController = Cast<ADeadbyDaylightPlayerController>(GetOwningPlayer());
-			if(PlayerController->bIsDemon)
-			{
-				PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->DemonCharacterClass);
-			}
-			else
-			{
-				PlayerController->SelectCharacter(GetGameInstance()->GetSubsystem<UBlueprintClassFinder>()->ExorcistCharacterClass);
-			}
 		}
 		else
 		{

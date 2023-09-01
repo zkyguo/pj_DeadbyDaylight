@@ -27,42 +27,6 @@ void AExorcistCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void AExorcistCharacter::Interact()
 {
 
-	if(PlayerController->CharacterState == EPlayerState::Normal)
-	{
-		if(PlayerController->NearItemType == EGameItemType::Cross)
-		{
-			
-		}
-		else if(PlayerController->NearItemType == EGameItemType::HitDownExorcist)
-		{
-			
-		}
-		else if (PlayerController->NearItemType == EGameItemType::Generator)
-		{
-			if(PlayerController->InteractingGenerator)
-			{
-				StartRepairGenerator(this, PlayerController->InteractingGenerator);
-			}
-		}
-	}
-}
-
-int32 AExorcistCharacter::GetPlayerIndex()
-{
-	return PlayerController->MyPlayerIndex;
-}
-
-
-void AExorcistCharacter::MyPlayerStartRepairGenerator_Implementation()
-{
-	PlayerController->CharacterState = EPlayerState::Repairing;
-
-	//if is possible Add pushCameraBack
-}
-
-void AExorcistCharacter::StartRepairGenerator_Implementation(AGameCharacter* RepairPlayer, AGenerator* Generator)
-{
-	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(GetWorld()->GetAuthGameMode());
-	GameMode->RepairGenerator(this, Generator, PlayerController);
 	
 }
+

@@ -12,266 +12,27 @@
 
 ADeadbyDaylightPlayerController::ADeadbyDaylightPlayerController()
 {
-	
 	UE_LOG(LogTemp, Warning, TEXT("Player : %s"), *this->GetName());
-	
 }
 
 void ADeadbyDaylightPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetWorld()->IsNetMode(NM_Client) && IsLocalPlayerController())
+	HUD = Cast<ADeadbyDaylightHUD>(GetHUD());
+
+	if (HUD->PreparePanelClass)
 	{
-		HUD = Cast<ADeadbyDaylightHUD>(GetHUD());
+		HUD->PreparePanel = CreateWidget<UUI_PreparePanel>(this, HUD->PreparePanelClass);
+		HUD->PreparePanel->AddToViewport();
 
-		if (HUD->PreparePanelClass)
-		{
-			HUD->PreparePanel = CreateWidget<UUI_PreparePanel>(this, HUD->PreparePanelClass);
-			HUD->PreparePanel->AddToViewport();
-
-			Manager = GetWorld()->SpawnActor<AElementManager>();
-			Manager->HUD = HUD;
-			Manager->PlayerController = this;
-		}
+		Manager = GetWorld()->SpawnActor<AElementManager>();
+		Manager->HUD = HUD;
+		Manager->PlayerController = this;
 	}
 }
 
 
-void ADeadbyDaylightPlayerController::ReceiveBattleBegin_Implementation(int32 MyIndex, const TArray<int32>& DemonPlayersIndex)
-{
-	MyPlayerIndex = MyIndex;
-	DemonPlayersIndexInGame = DemonPlayersIndex;
-	GetWorld()->GetTimerManager().ClearTimer(HUD->SelectCharacterPanel->CountDownTimerHandler);
-	HUD->SelectCharacterPanel->BattleBeginCountDown = 5;
-
-	GetWorld()->GetTimerManager().SetTimer(HUD->SelectCharacterPanel->CountDownTimerHandler, HUD->SelectCharacterPanel, &UUI_SelectCharacterPanel::BattleBeginningCountDown, 1.f,true);
-
-	SetShowMouseCursor(false);
-
-	GetWorld()->GetTimerManager().SetTimer(BattleCountDownHanderOnClient, this,&ThisClass::BattleTimeDownOnClient , .997f, true);
-	FTimerHandle ApprochObjectTH;
-	GetWorld()->GetTimerManager().SetTimer(ApprochObjectTH, this, &ThisClass::WhenApprochObject, .13f, true);
-}
-
-
-void ADeadbyDaylightPlayerController::StartSelectCharacter_Implementation()
-{
-	if(HUD->SelectCharacterClass)
-	{
-		HUD->SelectCharacterPanel = CreateWidget<UUI_SelectCharacterPanel>(this, HUD->SelectCharacterClass);
-		if (HUD->PreparePanel)
-		{
-			HUD->PreparePanel->RemoveFromViewport();
-		}
-		HUD->SelectCharacterPanel->AddToViewport();
-	}
-
-
-}
-
-void ADeadbyDaylightPlayerController::ReceivePreparedPlayer_Implementation(const TArray<UTexture2D*>& AllplayerAvatars,
-                                                                           const TArray<FText>& PlayerNames)
-{
-	HUD->PreparePanel->RefreshPlayers(PlayerAvatars, PlayerNames);
-	PlayerAvatars = AllplayerAvatars;
-}
-
-
-void ADeadbyDaylightPlayerController::LoadingBattle_Implementation(bool isDemon, int PlayerNum, const FText& PlayerName,
-                                                                   UTexture2D* Texture)
-{
-	//Get gameMode and Send owning player info to Server for joining game.
-	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(GetWorld()->GetAuthGameMode());
-	GameMode->ReceiveClientReload(this, isDemon, PlayerNum, FText::FromString(this->GetName()), Texture);
-}
-
-void ADeadbyDaylightPlayerController::SelectCharacter_Implementation(TSubclassOf<AGameCharacter> CharacterSelect)
-{
-	ADeadbyDaylightGameMode* GameMode = Cast<ADeadbyDaylightGameMode>(GetWorld()->GetAuthGameMode());
-
-	GameMode->UpdateSelectedCharacter(this, CharacterSelect);
-}
-
-void ADeadbyDaylightPlayerController::ReceiveCharacterSelect_Implementation(int32 OtherIndex, FName PlayerName,
-	TSubclassOf<AGameCharacter> SelectedCharacter)
-{
-	bool islocal = IsLocalPlayerController();
-	UE_LOG(LogTemp,Warning,TEXT("Player %d selects %s as character, is local : %hhd"), OtherIndex, *SelectedCharacter->GetName(), islocal)
-}
-
-
-void ADeadbyDaylightPlayerController::ReceiveMyCharacter_Implementation(AGameCharacter* MyCharacter)
-{
-	if (Cast<AExorcistCharacter>(MyCharacter))
-	{
-		MyDemonCharacter = Cast<ADemonCharacter>(MyCharacter);
-	}
-	else if (Cast<AExorcistCharacter>(MyCharacter))
-	{
-		MyExorcistCharacte = Cast<AExorcistCharacter>(MyCharacter);
-	}
-}
-
-
-void ADeadbyDaylightPlayerController::ReplicatedBattleTime_Implementation(int32 BattleTime)
-{
-	BattleTimerCountDownOnClient = BattleTime;
-}
-
-
-void ADeadbyDaylightPlayerController::ReceiveGameOverMessage_Implementation(bool isVictory)
-{
-}
-
-
-void ADeadbyDaylightPlayerController::StartOrStopRepairForAllPlayer_Implementation(
-	const TArray<AExorcistCharacter*>& RepairingPlayers, bool isRepairingStart,
-	const TArray<int32>& RepairingPlayerIndex, AGenerator* RepairGenerator, bool isStopByHit)
-{
-	for (int8 i = 0; i < RepairingPlayers.Num(); ++i)
-	{
-		RepairingPlayers[i]->isRepairingGenerator = isRepairingStart;
-		if (!isStopByHit)
-		{
-			if(isRepairingStart)
-			{
-				PlayerStateByIndex.Add(RepairingPlayers[i]->GetPlayerIndex(), EPlayerState::Repairing);
-			}
-			else
-			{
-				PlayerStateByIndex.Add(RepairingPlayers[i]->GetPlayerIndex(), EPlayerState::Normal);
-			}
-			
-		}
-
-	}
-	RepairGenerator->StartOrStopRepairing(isRepairingStart);
-}
-
-void ADeadbyDaylightPlayerController::BattleTimeDownOnClient()
-{
-	if(!isGameOver)
-	{
-		BattleTimerCountDownOnClient--;
-		if (BattleTimerCountDownOnClient < 0)
-		{
-			GetWorld()->GetTimerManager().ClearTimer(BattleCountDownHanderOnClient);
-		}
-	}
-	else
-	{
-		GetWorld()->GetTimerManager().ClearTimer(BattleCountDownHanderOnClient);
-	}
-	
-
-}
-
-void ADeadbyDaylightPlayerController::SetIsDemon(bool isDemon)
-{
-	bIsDemon = isDemon;
-}
-
-void ADeadbyDaylightPlayerController::WhenApprochObject()
-{
-	if(GetPawn())
-	{
-		if(bIsDemon)
-		{
-			
-		}
-		else
-		{
-			if(CharacterState != EPlayerState::HitDown && CharacterState != EPlayerState::OnSacrifice)
-			{
-				TArray<AActor*> AllDemon;
-				UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemonCharacter::StaticClass(), AllDemon);
-				bool isNearDemonNow = false; //Is demon approach during this function runs?
-				for (auto Demon : AllDemon)
-				{
-					float Distance = (Demon->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
-					float HeightDifference = Demon->GetActorLocation().Z - GetPawn()->GetActorLocation().Z;
-					if(Distance<800 && FMath::Abs(HeightDifference) < 100)
-					{
-						isNearDemonNow = true;
-						break;
-					}
-
-				}
-
-				//If a demon approachs during this func runs
-				if(isNearDemonNow)
-				{
-					//Update isNearDemon
-					if(!isNearDemon)
-					{
-						HUD->ActiveDemonClose(true, this);
-						isNearDemon = true;
-					}
-
-				}
-				else
-				{
-					//Demon is get away of player(before yes, now no)
-					if(isNearDemon)
-					{
-						HUD->ActiveDemonClose(false, this);
-						isNearDemon = false;
-					}
-					
-				}
-
-				if(!isAllEscapedKeyHasBeenFound)
-				{
-					if (NearItemType == EGameItemType::Generator)
-					{
-						float Distance = (InteractingGenerator->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
-						if (Distance < 200 && !InteractingGenerator->isRepaired)
-						{
-
-						}
-						//If there are a generator near you and another player just fix it, try to find other generator
-						else
-						{
-							NearItemType = EGameItemType::None;
-							TArray<AActor*> AllGenerator;
-							UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGenerator::StaticClass(), AllGenerator);
-							for (auto gen : AllGenerator)
-							{
-								AGenerator* Generator = Cast<AGenerator>(gen);
-								if (Distance < 200 && Generator->isRepaired == false)
-								{
-									NearItemType = EGameItemType::Generator;
-									InteractingGenerator = Generator;
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						NearItemType = EGameItemType::None;
-						TArray<AActor*> AllGenerator;
-						UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGenerator::StaticClass(), AllGenerator);
-
-						for (auto gen : AllGenerator)
-						{
-							float Distance = (gen->GetActorLocation() - GetPawn()->GetActorLocation()).Length();
-							AGenerator* Generator = Cast<AGenerator>(gen);
-							if (Distance < 200 && Generator->isRepaired == false)
-							{
-								NearItemType = EGameItemType::Generator;
-								InteractingGenerator = Generator;
-								break;
-							}
-						}
-					}
-				}
-				
-			}
-		}
-	}
-}
 
 
 
